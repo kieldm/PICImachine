@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    <script src="sketch_pici.js" type="text/javascript"></script>
+    <script src="update.js" type="text/javascript"></script>
+    
+    <script src="classGrid.js" type="text/javascript"></script>
+    <script src="classShape.js" type="text/javascript"></script>
+    <script src="1fit.js" type="text/javascript"></script>
+    <script src="1configure.js" type="text/javascript"></script>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <div id="generatorInput">
+      <div class="titleh2">
+        <h2>PICI Machine</h2>
+      </div>
+
+      <button type="button" class="collapsible"><h1>GRID</h1></button>
+      <div class="content">
+        <div class="coupling1">
+          <div class="coupling_label"><h3>Grid Unit</h3></div>
+          <input type="range" min="0" max="100" value="45" id="gridUnit" oninput="setGridUnit(this.value)">
+        </div>
+        <div class="coupling1">
+          <div class="coupling_label"><h3>Grid Pad</h3></div>
+          <input type="range" min="0" max="100" value="0" id="gridPad" oninput="setGridPad(this.value)">
+        </div>
+        <div class="coupling1">
+          <div class="coupling_label"><h3>X Limit</h3></div>
+          <input type="range" min="0" max="100" value="25" id="sizeLimitX" oninput="setSizeLimitX(this.value)">
+        </div>
+        <div class="coupling1">
+          <div class="coupling_label"><h3>Y Limit</h3></div>
+          <input type="range" min="0" max="100" value="6" id="sizeLimitY" oninput="setSizeLimitY(this.value)">
+        </div>
+        <div class="coupling1">
+          <div class="coupling_label"><h3>Fill Chance</h3></div>
+          <input type="range" min="0" max="100" value="50" id="percentToShow" oninput="setPercentToShow(this.value)">
+        </div>
+        <!-- <div class="coupling1">
+          <div class="coupling_label"><h3>Window Pad</h3></div>
+          <input type="range" min="0" max="100" value="50" id="sizeLimitY" oninput="setWindowPadding(this.value)">
+        </div> -->
+      </div>
+
+      <button type="button" class="collapsible"><h1>COLORS</h1></button>
+      <div class="content">
+        <div class="contentChecks">
+          <div class="checksColumnSet">
+            <div class="checksColumn">
+              <div class="listItem">
+                <input type="checkbox" id="purpleCheck" name="purple" value=0 onclick="setColors(0)" checked>
+                <label id="purple" for="purple">Purple</label>
+              </div>
+              <div class="listItem">
+                <input type="checkbox" id="grayCheck" name="gray" value=1 onclick="setColors(1)" checked>
+                <label id="gray" for="gray">Gray</label>
+              </div>
+              <div class="listItem">
+                <input type="checkbox" id="whiteCheck" name="white" value=2 onclick="setColors(2)" checked>
+                <label id="white" for="white">White</label>
+              </div>
+              <div class="listItem">
+                <input type="checkbox" id="orangeCheck" name="orange" value=3 onclick="setColors(3)" checked>
+                <label id="orange" for="orange">Orange</label>
+              </div>
+            </div>
+            <div class="checksColumn">
+              <div class="listItem">
+                <input type="checkbox" id="blueCheck"name="blue" value=4 onclick="setColors(4)" checked>
+                <label id="blue" for="blue">Blue</label>
+              </div>
+              <div class="listItem">
+                <input type="checkbox" id="greenCheck" name="green" value=5 onclick="setColors(5)" checked>
+                <label id="green" for="green">Green</label>
+              </div>
+              <div class="listItem">
+                <input type="checkbox" id="redCheck" name="red" value=6 onclick="setColors(6)" checked>
+                <label id="red" for="red">Red</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="collapsible"><h1>BACKGROUND</h1></button>
+      <div class="content">
+        <div class="module">
+          <!-- <input type="file" class="fileInput" id="bkgdImageUpload" name="bkgdImage" accept="image/png, image/jpeg" oninput="uploadBkgdImage()"> -->
+          <input type="file" class="fileInput" id="bkgdImageUpload" name="bkgdImage" accept="image/png, image/jpeg" oninput="runImageSet()">
+          <span class="uploadSpan" id="bkgdImageSpan">roberta.jpg</span>
+          <span class="uploadSpan" id="bkgdImageSpanSize">Width: 644  Height: 644</span>
+        </div>
+      </div>
+
+      <button type="button" class="collapsible"><h1>RANDOMIZE</h1></button>
+      <div class="content">
+        <div class="module">
+          <button type="button" class="reRollButton" onclick="runReRoll()">Randomize</button>
+        </div>
+        <div class="module">
+          <button type="button" class="reColorButton" onclick="runReColor()">Re-Colorize</button>
+        </div>
+      </div>
+
+      <button type="button" class="collapsible"><h1>EXPORT</h1></button>
+      <div class="content">
+        <div class="module">
+          <button type="button" class="reRollButton" onclick="runStaticSave()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function myFunction() {
+        var popup = document.getElementById("myPopup");
+        popup.classList.toggle("show");
+      }
+    </script>
+  
+    <script>
+      var coll = document.getElementsByClassName("collapsible");
+      var i;
+    
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        });
+      }
+    </script>
+  </body>
+
+</html>
